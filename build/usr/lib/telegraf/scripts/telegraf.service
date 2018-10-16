@@ -1,0 +1,17 @@
+[Unit]
+Description=(WoCloud Linux VM Version)The plugin-driven server agent for reporting metrics into InfluxDB
+Documentation=https://github.com/influxdata/telegraf
+After=network.target
+
+[Service]
+EnvironmentFile=-/etc/default/telegraf
+User=root
+ExecStartPre=/usr/bin/python2.7 /usr/bin/vm_telegraf_config.py
+ExecStart=/usr/bin/telegraf -config /etc/telegraf/telegraf.conf
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+RestartForceExitStatus=SIGPIPE
+KillMode=control-group
+
+[Install]
+WantedBy=multi-user.target
